@@ -1,0 +1,13 @@
+ Modo      Significado 
+•“r”     Abre Arquivo de Texto para Leitura 
+•“w”     Cria Arquivo de Texto para Gravação 
+•“a”     Anexa a um Arquivo de Texto  
+•“rb”     Abre Arquivo Binário para Leitura 
+•“wb”    Cria Arquivo Binário para Gravação 
+•“ab”    Anexa a um Arquivo Binário  
+•“r+”      Abre Arquivo de Texto para Leitura/Gravação 
+•“w+”   Cria Arquivo de Texto para Leitura/Gravação 
+•“a+”   Abre ou Cria Arquivo de Texto para Leitura/Gravação
+•“r+b”    Abre Arquivo Binário para Leitura/Gravação 
+•“w+b”    Cria Arquivo Binário para Leitura/Gravação 
+•“a+b”    Abre ou Cria Arquivo Binário para Leitura/Gravação 

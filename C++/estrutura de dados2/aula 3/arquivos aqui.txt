@@ -1,0 +1,27 @@
+leitura e gravaçao:
+
+caracter
+--texto:
+	fgetc
+	fputc
+
+--binario:
+	fread
+	fwrite
+
+
+
+string
+--texto:
+	fgets
+	fputs
+
+--binario:
+...
+
+
+formatado
+--texto:
+	fscanf
+	fprintf
+
