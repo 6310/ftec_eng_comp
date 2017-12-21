@@ -1,4 +1,6 @@
-Repositorio Engenharia de Computação FTEC/UNIFTEC
+Em construÃ§Ã£o
+
+Repositorio Engenharia de ComputaÃ§Ã£o FTEC/UNIFTEC
 
 Exemplos de:
 
@@ -8,7 +10,6 @@ Requisitos de software/Enharia de Software
 ...
 ...
 
-Em construção
 
-Caso queira ajudar com a construção do acervo, envie um email para geiolaz@gmail.com ou insira conteudo diretamente no git.
-Exemplo de codigo comentado é bem vindo
+Caso queira ajudar com a construÃ§Ã£o do acervo, envie um email para geiolaz@gmail.com ou insira conteudo diretamente no git.
+Exemplo de codigo comentado Ã© bem vindo
