@@ -1,0 +1,72 @@
+
+; Fazer um procedimento que retorne a posição e o valor do menor elemento de uma string apontada por SI. O procedimento recebe, além do SI, Cx com o número de ;caracteres da string e devolve em Dx a posição do menor elemento e em AL o seu valor.
+
+
+data segment
+    nums db "932464235761$"
+    pkey db "press any key...$"
+ends
+
+stack segment
+    dw   128  dup(0)
+ends
+
+code segment
+start:
+; set segment registers:
+    mov ax, data
+    mov ds, ax
+    mov es, ax  
+    
+    
+    lea si,nums
+    mov cx,12    ;inicialização
+    
+    
+
+procedimento:     ;programa da questao 2
+    mov bx, 0 
+    mov al, [si]
+    inc si
+    jmp compara
+    
+    
+compara:
+    cmp cx, bx      ;verifica se chegou ao fim
+    je fim
+    
+    
+    cmp al, [si]
+    ja ehmenor       ;verifica o menor
+    inc si
+    inc bx
+    jmp compara
+    
+    
+ehmenor:           ;grava em al o menor
+    mov al, [si]   ;grava em dx a posicao 
+    mov dx, bx
+    inc si
+    inc bx         ;incrementa e volta
+    jmp compara 
+    
+    
+fim:
+    mov ah, 4ch  ;fim questao 2
+    int 21h
+    
+    
+            
+    lea dx, pkey
+    mov ah, 9
+    int 21h        ; output string at ds:dx
+    
+    ; wait for any key....    
+    mov ah, 1
+    int 21h
+    
+    mov ax, 4c00h ; exit to operating system.
+    int 21h    
+ends
+
+end start ; set entry point and stop the assembler.

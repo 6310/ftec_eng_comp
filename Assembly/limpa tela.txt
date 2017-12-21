@@ -1,0 +1,59 @@
+; Escrever um programa Assembly que limpe a tela e escreva uma mensagem na linha 12 com um sinal sonoro.
+;obs: programa mal feito...
+data segment
+    mensagem db "mensagem que esta escrita...$"
+    pkey db "press any key...$"
+ends
+
+stack segment
+    dw   128  dup(0)
+ends
+
+code segment
+start:
+; set segment registers:
+    mov ax, data
+    mov ds, ax
+    mov es, ax 
+               
+               
+     
+    mov dl, 08 
+    mov cx, 20   ;apaga
+    
+apaga: mov ah,2
+       int 21h 
+       loop apaga
+       
+       mov dl, 10            
+       mov cx, 11            
+pulaLinhas:mov ah,2    ;pula 12 linhas
+       int 21h 
+       loop pulaLinhas
+       
+                
+       lea dx,mensagem
+       mov ah, 9
+       int 21h 
+       
+       mov dl, 7
+       mov ah, 2
+       int 21h 
+        
+
+
+
+            
+    lea dx, pkey
+    mov ah, 9
+    int 21h        ; output string at ds:dx
+    
+    ; wait for any key....    
+    mov ah, 1
+    int 21h
+    
+    mov ax, 4c00h ; exit to operating system.
+    int 21h    
+ends
+
+end start ; set entry point and stop the assembler.
