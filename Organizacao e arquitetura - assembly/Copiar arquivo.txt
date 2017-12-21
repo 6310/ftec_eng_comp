@@ -1,0 +1,267 @@
+data segment 
+    ;Variaveis utilizadas para mensagens
+	msg db 13,10,"Digite o nome do arquivo de origem: $"
+    msgds db 13,10,"Digite o nome do arquivo de desino: $"
+	cancel_msg db 13,10,"Copia cancelada!$"
+    err_msg db 13,10,"Erro na gravacao do arquivo. Cod: $"
+    ok_msg db 13,10,"Copia de arquivos concluida com sucesso!$"
+	msg1 db 13,10, "Erro ao abrir o arquivo de origem! Cod: $"
+    msg2 db 13,10, "Copiando arquivos...", 10, 13, "$"
+	    
+    ;vezes db 0
+	
+	;handlers de arquivo
+    handOr dw ?
+    handDs dw ?
+	
+	;variaveis de nomes de arquivos
+    origem db 20 dup(0)
+    destino db 20 dup(0)
+    
+	;variaveis de manipulacao de informacoes
+    coderro db "00000$"
+    buf db 0
+	erroc dw 0
+
+ends
+
+code segment  
+    assume CS:code, DS:data
+start:
+	; configuracoes de segmento:
+    mov ax, data
+    mov ds, ax
+
+	;inicio da leitura do nome do arquivo de origem para copia
+    lea si, origem
+	
+	;prepara o loop para rodar 18 vezes
+    mov cx, 18
+	;exibe a mensagem de para inserir nome
+    lea dx, msg
+    mov ah, 9
+    int 21h
+    
+nome:
+	;aguarda a tecla ser pressionada
+    mov ah, 1
+    int 21h
+	
+	;se pressionado esc cancela a copia
+    cmp al, 27
+    je cancela
+    
+	;se for enter salta para aquisicao do nome do arquivo de destino
+    cmp al, 13
+    je nome_destino
+    
+	;incrementa o ponteiro para a proxima letra a ser inserida no vetor
+    mov [si], al
+    inc si
+    
+	;loop enquanto cx não for zero
+    loop nome
+    jmp nome_destino
+    
+cancela:
+	;executa quando o comando for cancelado exibindo mensagem
+    lea dx, cancel_msg
+    mov ah, 9
+    int 21h
+    jmp fim     
+    
+nome_destino:    
+	;captura o nome do arquivo de destino e exibe a mensage para tal
+    lea si, destino
+    mov cx, 18
+    
+    lea dx, msgds
+    mov ah, 9
+    int 21h
+    
+    
+nome_dest:
+	;aguarda os caracteres serem digitados
+    mov ah, 1
+    int 21h
+    
+	;compara se for esc para sair do programa
+    cmp al, 27
+    je cancela
+    
+	;se for enter prossegue com a copia
+    cmp al, 13
+    je abre
+    
+	;incrementa posicao do vetor de nome de destino
+    mov [si], al
+    inc si
+    
+    loop nome_dest
+    
+    
+abre:   ;abre o arquivo de origem para leitura 
+        ;ERROS: http://www/ctyme.com/intr/rb-3012.html#Table1680
+    mov ah, 3Dh
+    lea dx, origem
+    mov al, 0
+    int 21h
+	;desvia para o tratamento de erro se ocorrer
+    jc erro_abertura
+	
+	;Salva o handler do arquivo (Muito importante)
+    mov handOr, ax
+    
+cria:
+	;faz a criacao do novo arquivo de destino
+    mov ah, 5Bh ; criar                            
+    lea dx, destino
+    mov cx, 0
+    int 21h
+	
+	;caso ocorra erro na criacao desvia para o tratamento
+    jc erro
+	
+	;salva o handler do novo arquivo criado
+    mov handDs, ax
+    
+	;exibe a mensagem que está copiando
+    lea dx, msg2
+    mov ah, 9
+    int 21h
+    
+copia:
+    ; Le arquivo origem para o buffer buf
+    mov al, 0
+    mov ah, 3Fh
+    mov bx, handOr
+    mov cx, 1
+    lea dx, buf
+    int 21h
+	;caso ocorra erro salta para o tratamento
+    jc erro
+    
+    cmp ax, 0   ;se chegar no fim do arquivo salta
+    je fimarq
+   
+    ;grava dados no arquivo novo baseado em buf
+    mov ah, 40h
+    mov bx, handDs
+    mov cx, 1
+    lea dx, buf
+    int 21h
+    
+	;salta para o inicio representando o loop
+	;por nao ser conhecido o tamanho do arquivo
+    jmp copia
+    
+erro:
+	;salva o codigo de erro da manipulacao de arquivo na variavel 
+    mov [erroc], ax
+	
+	;exibe a mensagem de erro ao copiar
+    lea dx, err_msg
+    mov ah, 9
+    int 21h
+    
+	;converte o codigo de erro para decimal
+    call bin2dec
+    
+	;exibe o codigo de erro em tela
+    lea dx, coderro
+    mov ah, 9
+    int 21h
+    
+    jmp fim
+
+fimarq:
+
+	;ao chegar no fim da copia fecha o handler do arquivo de origem
+    mov ah, 3Eh
+    mov bx, handOr
+    int 21h
+    
+	;fecha o handler do arquivo de destino
+    mov ah, 3Eh
+    mov bx, handDs
+    int 21h
+    
+	;se ocorrer erro ao salvar salta para o tratamento de erros
+    jc erro
+	;caso nao ocorram erros salta para a mensagem de concluido com sucesso
+    jnc certo
+    
+    
+erro_abertura:
+
+	;salva codigo de erro na variavel
+    mov [erroc], ax
+    
+	;exibe mensagem de erro na abertura
+    lea dx, msg1
+    mov ah, 9
+    int 21h
+	
+	;converte para decimal o codigo de erro
+    call bin2dec
+    
+	;exibe o erro em tela
+    lea dx, coderro
+    mov ah, 9
+    int 21h
+    
+    jmp fim
+    
+
+certo:
+	;exibe mensagem de conclusao com sucesso
+    lea dx, ok_msg
+    mov ah, 9
+    int 21h
+    jmp fim
+    
+
+fim:
+	;aguarda uma tecla ser pressionada para encerrar o programa
+    mov ah, 1
+    int 21h
+	;devolve o controle para o sistema operacional
+    mov ah, 4Ch
+    int 21h
+    
+    ;rotina de conversão de binário para decimal (texto)
+bin2dec:
+    ;busca a string para mostrar o codigo de erro 
+    lea si, coderro
+	;posiciona-se no quito caracter da string 00000$
+    ;                                             ^
+    add si, 5
+	;busca o valor do erro
+    mov ax, [erroc]
+outro:    
+	;compara se for menor que 10 salta
+    cmp ax, 10
+    jb ultimo
+	;senao prepara o valor para divisao por 10 nos 
+	;registradores correspondentes a divisao inteira
+    mov bx, 10
+    mov dx, 0
+    div bx
+	;apos a divisao incrementa em 48 o quociente da divisao para formar o codigo decimal
+    add dl, 48
+	;move o valor convertido para a posicao do vertor
+    mov [si], dl
+	;decrementa o ponteiro (move para esquerda)
+    dec si
+	;roda novamente até que o valor para dividir seja menor que 10
+    jmp outro
+ultimo:
+	;converte o algarismo mais significativo para string e grava na posicao do vetor
+    add al, 48
+    mov [si], al
+	;retorna da funcao
+    ret
+
+ends
+
+end start
