@@ -7,6 +7,7 @@
 
 #Instalando e Carregando Pacotes
 install.packages("readr")
+install.packages("scales")
 install.packages("data.table")
 library(readr)
 library(dplyr)
@@ -14,7 +15,8 @@ library(ggplot2)
 library(scales)
 library(data.table)
 #library(dtplyr)
-
+getwd()
+setwd("C:/Users/Geio/Desktop/R aula")
 #Carregando os dados (Usando um timer para comparar o tempo de carregamento)
 
 #Usando read.csv2()
@@ -25,16 +27,17 @@ system.time(df_teste2 <- read.table("TemperaturasGlobais.csv"))
 
 #Usando fread()
 ?fread
-system.time(df <- fread("C:/Users/Diego/Documents/R/Aux_Curso/aula 2/TemperaturasGlobais.csv"))
+system.time(df <- fread("TemperaturasGlobais.csv"))
 
 #Criando subsets dos dados carregados
 cidadesBrasil <- subset(df, Country == 'Brazil')
-cidadesBrasil <- na.omit(cidadesBrasil)
+cidadesBrasil <- na.omit(cidadesBrasil)#remove linhas com valores vazios
 head(cidadesBrasil)
 nrow(df)
 nrow(cidadesBrasil)
 dim(cidadesBrasil)
 
+??na.omit
 #Prepara??o e Organiza??o
 
 #Convertendo as Datas

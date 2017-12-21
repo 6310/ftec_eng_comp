@@ -1,11 +1,15 @@
+install.packages("twitteR")
+install.packages("ROAuth")
+install.packages("bitops")
+install.packages("RCurl")
 library(twitteR)
 library(ROAuth)
 library(bitops)
 library(RCurl)
-setup_twitter_oauth(consumer_key = 	'rK5Z6FnH4fJekQrEtG9nLXXpk', 
-                    consumer_secret = 'JkVgvNmTCA5BfhKGP7NvgOs9pvEauj5apuWpqBwZSxdKmT1vg2', 
-                    access_token = 	'3291377977-xuZvJItoylhPwkKffjcIDUTigtNZ0t3aeetsJro', 
-                    access_secret = 	'niDvIerfF90kKlCq72cRiUiMn71bTSHzLDxnnrQvKUry5')
+setup_twitter_oauth(consumer_key = 	'N0rtUhxBfeguFyo2vfaHW59t5', 
+                    consumer_secret = '16E5MlFKi2TxFPuLh9oyPAmqjjQYU2JYs4u5H9QSlOGrxt74Pp', 
+                    access_token = 	'1692064994-cRPx2PzFJQn6lDcyq6ytOp9I09EPNlwgz3noHdl', 
+                    access_secret = 	'keDVIf9CKui8dx2ge1ZCA7ylKae4aphydnvaOxH99EHrQ')
 
 #s <- searchTwitter("globo", n=50, lang="pt", since='2016-07-01')
 

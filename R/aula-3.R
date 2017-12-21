@@ -2,6 +2,8 @@
 #Arquivos txt
 
 # Trabalhando com Arquivos txt
+getwd()
+setwd("C:/Users/Geio/Desktop/R aula")
 
 
 # Importando arquivo com read.table()
@@ -11,7 +13,7 @@ df1 <- read.table("pedidos.txt")
 df1
 dim(df1)
 
-df1 <- read.table("pedidos.txt", header = TRUE, sep = ',')
+df1 <- read.table("pedidos.txt", header = TRUE, sep = ',') # cabeçalho e separador
 df1
 dim(df1)
 
@@ -86,7 +88,6 @@ df_pedidos <- read.table("http://datascienceacademy.com.br/blog/aluno/RFundament
 df_pedidos
 
 #Arquivos csv
-
 install.packages("readr")
 library(readr)
 
