@@ -1,5 +1,14 @@
-# ftec_eng_comp
+Repositorio Engenharia de Computação FTEC/UNIFTEC
 
-Teste
-Teste
-Teste
+Exemplos de:
+
+Assembly
+R
+Requisitos de software/Enharia de Software
+...
+...
+
+Em construção
+
+Caso queira ajudar com a construção do acervo, envie um email para geiolaz@gmail.com ou insira conteudo diretamente no git.
+Exemplo de codigo comentado é bem vindo
